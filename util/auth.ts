@@ -7,7 +7,7 @@ const oauth2Client = new OAuth2Client({
   clientSecret: configData["GOOGLE_CLIENT_SECRET"],
   authorizationEndpointUri: "https://accounts.google.com/o/oauth2/v2/auth",
   tokenUri: "https://accounts.google.com/o/oauth2/token",
-  redirectUri: "http://localhost:8000/redirect",
+  redirectUri: configData["REDIRECT_URL"],
   defaults: {
     scope: "https://www.googleapis.com/auth/photoslibrary",
   },

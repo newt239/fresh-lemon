@@ -12,7 +12,9 @@ export default function Twitter() {
 
   useEffect(() => {
     const getAlbumList = async () => {
-      const res = await fetch(`http://localhost:8000/api/google/albums`);
+      const res = await fetch(
+        `./api/google/albums`,
+      );
       const data = await res.json();
       console.log(data);
       setAlbumList(data);
@@ -22,15 +24,14 @@ export default function Twitter() {
 
   const getTweet = async () => {
     const id = tweetUrl.split("status/")[1];
-    const url = `http://localhost:8000/api/twitter?id=${id}`;
-    console.log(url);
+    const url = `./api/twitter?id=${id}`;
     const tres = await fetch(url);
     setTweet(await tres.json());
   };
 
   const saveToGooglePhoto = async () => {
     if (tweet) {
-      const url = `http://localhost:8000/api/google/upload`;
+      const url = `./api/google/upload`;
       const res = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
@@ -39,7 +40,6 @@ export default function Twitter() {
         }),
       });
       const data = await res.json();
-      console.log(data);
       setGooglePhotos(data);
     }
   };
