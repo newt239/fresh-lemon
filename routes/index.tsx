@@ -20,9 +20,9 @@ export default function Home({ url, data }: PageProps<{ uri: string }>) {
   return (
     <>
       <main>
-        <h1>Fresh Lemon</h1>
-        <h2>twitter2gphoto</h2>
-        <a href={data.uri}>Sign in with Google</a>
+        <h1 class="text-3xl font-bold">Fresh Lemon</h1>
+        <h2 class="text-xl font-bold mt-5">twitter2gphoto</h2>
+        <a href={data.uri} class="btn btn-accent m-5">Sign in with Google</a>
       </main>
     </>
   );

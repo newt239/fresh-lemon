@@ -46,15 +46,21 @@ export default function Twitter() {
 
   return (
     <div>
-      <h3>Tweet URL</h3>
-      <input
-        type="text"
-        value={tweetUrl}
-        onChange={(e) => setTweetUrl(e.currentTarget.value)}
-      />
-      <button onClick={getTweet}>
-        Get!
-      </button>
+      <h3 class="text-xl font-bold mt-5">Tweet URL</h3>
+      <div class="flex gap-5 items-center">
+        <input
+          type="text"
+          value={tweetUrl}
+          onChange={(e) => setTweetUrl(e.currentTarget.value)}
+          class="input input-bordered w-full max-w-xs my-5"
+        />
+        <button
+          onClick={getTweet}
+          class="btn btn-primary"
+        >
+          Get!
+        </button>
+      </div>
       {tweet && (
         <div>
           <div class="tweetImageList">
@@ -62,24 +68,30 @@ export default function Twitter() {
               <img src={media.url} class="tweetImage" />
             ))}
           </div>
-          <button onClick={saveToGooglePhoto}>Save to Google Photo</button>
+          <h3 class="text-xl font-bold mt-5">Album</h3>
+          <select
+            onChange={(e) => setCurrentAlbumId(e.currentTarget.value)}
+            class="select select-bordered w-full max-w-xs my-5"
+          >
+            {albumList.map((album, key) => (
+              <option value={album.id}>{album.title}</option>
+            ))}
+          </select>
+          <button
+            onClick={saveToGooglePhoto}
+            class="btn btn-primary btn-block my-5"
+          >
+            Save to Google Photo
+          </button>
         </div>
       )}
-      <h3>Album</h3>
-      <select
-        onChange={(e) => setCurrentAlbumId(e.currentTarget.value)}
-      >
-        {albumList.map((album, key) => (
-          <option value={album.id}>{album.title}</option>
-        ))}
-      </select>
       {googlePhotos.length !== 0 && (
         <div>
-          <h3>Success!</h3>
-          <ul>
+          <h3 class="text-xl font-bold mt-5">Success!</h3>
+          <ul class="list-disc m-5">
             {googlePhotos.map((photo) => (
               <li>
-                <a href={photo} target="_blank">
+                <a href={photo} target="_blank" class="link link-accent">
                   {photo}
                 </a>
               </li>
@@ -87,7 +99,7 @@ export default function Twitter() {
           </ul>
         </div>
       )}
-      <a href="/">back home</a>
+      <a href="/" class="btn btn-link">{"<"} back home</a>
     </div>
   );
 }
