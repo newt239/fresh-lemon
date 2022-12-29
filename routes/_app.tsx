@@ -13,7 +13,9 @@ export default function ({ Component }: AppProps) {
         />
         <link rel="stylesheet" href={asset("style.css")} />
       </Head>
-      <Component />
+      <div data-theme="lemonade">
+        <Component />
+      </div>
     </>
   );
 }

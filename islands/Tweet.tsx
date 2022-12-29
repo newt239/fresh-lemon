@@ -63,6 +63,21 @@ export default function Twitter() {
       </div>
       {tweet && (
         <div>
+          <ul class="list-disc m-5">
+            <li>
+              <a
+                href={`https://twitter.com/${
+                  tweet.includes.users[0].username
+                }/status/${tweet.data.id}`}
+                target="_blank"
+                class="link link-primary"
+              >
+                {`https://twitter.com/${
+                  tweet.includes.users[0].username
+                }/status/${tweet.data.id}`}
+              </a>
+            </li>
+          </ul>
           <div class="tweetImageList">
             {tweet.includes.media.map((media) => (
               <img src={media.url} class="tweetImage" />
@@ -71,7 +86,7 @@ export default function Twitter() {
           <h3 class="text-xl font-bold mt-5">Album</h3>
           <select
             onChange={(e) => setCurrentAlbumId(e.currentTarget.value)}
-            class="select select-bordered w-full max-w-xs my-5"
+            class="select select-primary w-full max-w-xs my-5"
           >
             {albumList.map((album, key) => (
               <option value={album.id}>{album.title}</option>
@@ -91,7 +106,7 @@ export default function Twitter() {
           <ul class="list-disc m-5">
             {googlePhotos.map((photo) => (
               <li>
-                <a href={photo} target="_blank" class="link link-accent">
+                <a href={photo} target="_blank" class="link link-primary">
                   {photo}
                 </a>
               </li>

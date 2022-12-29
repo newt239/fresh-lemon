@@ -1378,7 +1378,10 @@
     "specifiers": {
       "@mantine/core": "@mantine/core@5.9.5_react@18.2.0_react-dom@18.2.0",
       "googleapis@110.0.0": "googleapis@110.0.0",
-      "piexifjs": "piexifjs@1.0.6"
+      "piexifjs": "piexifjs@1.0.6",
+      "react-twitter-embed": "react-twitter-embed@4.0.4_react@18.2.0",
+      "react-twitter-embed@4": "react-twitter-embed@4.0.4_react@18.2.0",
+      "react-twitter-embed@4.0.4": "react-twitter-embed@4.0.4_react@18.2.0"
     },
     "packages": {
       "@ampproject/remapping@2.2.0": {
@@ -2199,6 +2202,14 @@
           "use-latest": "use-latest@1.2.1_react@18.2.0"
         }
       },
+      "react-twitter-embed@4.0.4_react@18.2.0": {
+        "integrity": "sha512-2JIL7qF+U62zRzpsh6SZDXNI3hRNVYf5vOZ1WRcMvwKouw+xC00PuFaD0aEp2wlyGaZ+f4x2VvX+uDadFQ3HVA==",
+        "dependencies": {
+          "react": "react@18.2.0",
+          "react-dom": "react-dom@18.2.0_react@18.2.0",
+          "scriptjs": "scriptjs@2.5.9"
+        }
+      },
       "react@18.2.0": {
         "integrity": "sha512-/3IjMdb2L9QbBdWiW5e3P2/npwMBaU9mHCSCUzNln0ZCYbcfTsGbTJrU/kGemdH2IWmB2ioZ+zkxtmq6g09fGQ==",
         "dependencies": { "loose-envify": "loose-envify@1.4.0" }
@@ -2226,6 +2237,10 @@
       "scheduler@0.23.0": {
         "integrity": "sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==",
         "dependencies": { "loose-envify": "loose-envify@1.4.0" }
+      },
+      "scriptjs@2.5.9": {
+        "integrity": "sha512-qGVDoreyYiP1pkQnbnFAUIS5AjenNwwQBdl7zeos9etl+hYKWahjRTfzAZZYBv5xNHx7vNKCmaLDQZ6Fr2AEXg==",
+        "dependencies": {}
       },
       "semver@6.3.0": {
         "integrity": "sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==",

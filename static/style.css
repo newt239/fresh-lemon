@@ -4,7 +4,8 @@ html, body {
 }
 
 main {
-  margin: 1rem;
+  padding: 1rem;
+  min-height: 100vh;
 }
 
 button {
@@ -20,4 +21,8 @@ button {
 
 .tweetImage {
   max-width: 50%;
+}
+
+.btn{
+  text-transform: none;
 }
