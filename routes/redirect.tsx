@@ -5,7 +5,6 @@ import oauth2Client from "../util/auth.ts";
 export const handler: Handlers = {
   async GET(req, ctx) {
     const codeVerifier = getCookies(req.headers)["code_verifier"];
-    console.log(codeVerifier);
     if (!codeVerifier) {
       throw Error("error!");
     }
@@ -33,8 +32,14 @@ export default function Redirect({ url, data }: PageProps<{ auth: boolean }>) {
     <>
       <main>
         {data.auth ? <h2>login success!</h2> : <h2>login failed...</h2>}
-        <a href="/">back home</a>
-        <a href="/twitter2gphoto">add image</a>
+        <ul>
+          <li>
+            <a href="/twitter2gphoto">Save photos on Twitter</a>
+          </li>
+          <li>
+            <a href="/">Back home</a>
+          </li>
+        </ul>
       </main>
     </>
   );

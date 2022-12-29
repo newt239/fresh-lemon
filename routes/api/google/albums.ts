@@ -18,7 +18,6 @@ export interface GetGooglePhotoAlbumsResponse {
 export const handler: Handlers = {
   async GET(req, _ctx) {
     const accessToken = getCookies(req.headers)["access_token"];
-    console.log(accessToken);
     const res = await fetch(
       "https://photoslibrary.googleapis.com/v1/albums",
       {
@@ -29,7 +28,6 @@ export const handler: Handlers = {
       },
     );
     const albums: GetGooglePhotoAlbumsResponse = await res.json();
-    console.log(albums);
     return new Response(JSON.stringify(albums.albums));
   },
 };

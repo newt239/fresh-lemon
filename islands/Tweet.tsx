@@ -16,7 +16,6 @@ export default function Twitter() {
         `./api/google/albums`,
       );
       const data = await res.json();
-      console.log(data);
       setAlbumList(data);
     };
     getAlbumList();
@@ -25,8 +24,9 @@ export default function Twitter() {
   const getTweet = async () => {
     const id = tweetUrl.split("status/")[1];
     const url = `./api/twitter?id=${id}`;
-    const tres = await fetch(url);
-    setTweet(await tres.json());
+    const res = await fetch(url);
+    const data = await res.json();
+    setTweet(data);
   };
 
   const saveToGooglePhoto = async () => {
@@ -46,11 +46,26 @@ export default function Twitter() {
 
   return (
     <div>
+      <h3>Tweet URL</h3>
       <input
         type="text"
         value={tweetUrl}
         onChange={(e) => setTweetUrl(e.currentTarget.value)}
       />
+      <button onClick={getTweet}>
+        Get!
+      </button>
+      {tweet && (
+        <div>
+          <div class="tweetImageList">
+            {tweet.includes.media.map((media) => (
+              <img src={media.url} class="tweetImage" />
+            ))}
+          </div>
+          <button onClick={saveToGooglePhoto}>Save to Google Photo</button>
+        </div>
+      )}
+      <h3>Album</h3>
       <select
         onChange={(e) => setCurrentAlbumId(e.currentTarget.value)}
       >
@@ -58,25 +73,21 @@ export default function Twitter() {
           <option value={album.id}>{album.title}</option>
         ))}
       </select>
-      <button onClick={getTweet}>
-        get tweet
-      </button>
-      <a href="/">back home</a>
-      {tweet && (
+      {googlePhotos.length !== 0 && (
         <div>
-          {tweet.includes.media.map((media) => <img src={media.url} />)}
-          <button onClick={saveToGooglePhoto}>Save to Google Photo</button>
+          <h3>Success!</h3>
+          <ul>
+            {googlePhotos.map((photo) => (
+              <li>
+                <a href={photo} target="_blank">
+                  {photo}
+                </a>
+              </li>
+            ))}
+          </ul>
         </div>
       )}
-      <ul>
-        {googlePhotos.map((photo) => (
-          <li>
-            <a href={photo}>
-              {photo}
-            </a>
-          </li>
-        ))}
-      </ul>
+      <a href="/">back home</a>
     </div>
   );
 }

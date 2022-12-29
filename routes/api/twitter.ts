@@ -1,5 +1,5 @@
-import { config } from "https://deno.land/std@0.170.0/dotenv/mod.ts";
 import { HandlerContext } from "https://deno.land/x/rutt@0.0.13/mod.ts";
+import "https://deno.land/std@0.133.0/dotenv/load.ts";
 
 export interface Tweet {
   data: Data;
@@ -41,8 +41,7 @@ export const handler = async (
   _req: Request,
   _ctx: HandlerContext,
 ) => {
-  const configData = await config();
-  const bearerToken = configData["TWITTER_BEARER_TOKEN"];
+  const bearerToken = Deno.env.get("TWITTER_BEARER_TOKEN");
   const id = _req.url.split("?id=")[1];
   const res = await fetch(
     `https://api.twitter.com/2/tweets/${id}?tweet.fields=created_at,source&expansions=attachments.media_keys,author_id,entities.mentions.username&media.fields=duration_ms,height,media_key,preview_image_url,type,url,width,public_metrics,non_public_metrics,organic_metrics,promoted_metrics,alt_text,variants`,

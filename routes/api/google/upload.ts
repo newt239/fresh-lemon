@@ -36,14 +36,21 @@ export interface MediaMetaData {
   "height": string;
 }
 
+interface MediaItemProps {
+  description: string;
+  simpleMediaItem: {
+    fileName: string;
+    uploadToken: string;
+  };
+}
+
 export const handler: Handlers = {
   async POST(req, _ctx) {
     const accessToken = getCookies(req.headers)["access_token"];
-    console.log(accessToken);
 
     const params: UploadToGooglePhotoRequest = await req.json();
     const tweet = params.tweet;
-    const googlePhotoUrlList: string[] = [];
+    const mediaItems: MediaItemProps[] = [];
 
     for (const image of tweet.includes.media) {
       const imageRes = await fetch(image.url);
@@ -64,41 +71,39 @@ export const handler: Handlers = {
           },
         );
         const token = await res.text();
-        const uploadRes = await fetch(
-          `https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate`,
-          {
-            method: "POST",
-            headers: {
-              "Content-type": "application/json",
-              Authorization: `Bearer ${accessToken}`,
-              "Access-Control-Allow-Origin": "*",
-            },
-            body: JSON.stringify({
-              "albumId": params.album_id,
-              "newMediaItems": [
-                {
-                  "description":
-                    `${tweet.data.text}\n\n${tweet.data.created_at}\nhttps://twitter.com/${
-                      tweet.includes.users[0].username
-                    }/status/${tweet.data.id}`,
-                  "simpleMediaItem": {
-                    "fileName": image.media_key,
-                    "uploadToken": token,
-                  },
-                },
-              ],
-            }),
+        mediaItems.push({
+          description:
+            `${tweet.data.text}\n\n${tweet.data.created_at}\nhttps://twitter.com/${
+              tweet.includes.users[0].username
+            }/status/${tweet.data.id}`,
+          simpleMediaItem: {
+            fileName: image.media_key,
+            uploadToken: token,
           },
-        );
-        const gphoto: UploadToGooglePhotoSuccessResponse = await uploadRes
-          .json();
-        googlePhotoUrlList.concat(
-          gphoto.newMediaItemResults.map((result) =>
-            result.mediaItem.productUrl
-          ),
-        );
+        });
       }
     }
+    const uploadRes = await fetch(
+      `https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate`,
+      {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({
+          "albumId": params.album_id,
+          "newMediaItems": mediaItems,
+        }),
+      },
+    );
+
+    const gphoto: UploadToGooglePhotoSuccessResponse = await uploadRes
+      .json();
+    const googlePhotoUrlList = gphoto.newMediaItemResults.map((result) =>
+      result.mediaItem.productUrl
+    );
     return new Response(JSON.stringify(googlePhotoUrlList));
   },
 };

@@ -5,9 +5,11 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Add image from Twitter</title>
+        <title>Save photos from Twitter</title>
       </Head>
-      <Twitter />
+      <main>
+        <Twitter />
+      </main>
     </>
   );
 }
