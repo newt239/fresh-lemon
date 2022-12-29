@@ -1,4 +1,5 @@
 import { Handlers } from "https://deno.land/x/fresh@1.1.2/server.ts";
+import { getCookies } from "$std/http/cookie.ts";
 
 export interface Album {
   id: string;
@@ -15,8 +16,9 @@ export interface GetGooglePhotoAlbumsResponse {
 }
 
 export const handler: Handlers = {
-  async GET(_req, _ctx) {
-    const accessToken = localStorage.getItem("accessToken");
+  async GET(req, _ctx) {
+    const accessToken = getCookies(req.headers)["access_token"];
+    console.log(accessToken);
     const res = await fetch(
       "https://photoslibrary.googleapis.com/v1/albums",
       {

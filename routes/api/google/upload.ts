@@ -1,5 +1,6 @@
 import { Tweet } from "../twitter.ts";
 import { Handlers } from "https://deno.land/x/fresh@1.1.2/server.ts";
+import { getCookies } from "$std/http/cookie.ts";
 
 export interface UploadToGooglePhotoRequest {
   album_id: string;
@@ -37,7 +38,8 @@ export interface MediaMetaData {
 
 export const handler: Handlers = {
   async POST(req, _ctx) {
-    const accessToken = localStorage.getItem("accessToken");
+    const accessToken = getCookies(req.headers)["access_token"];
+    console.log(accessToken);
 
     const params: UploadToGooglePhotoRequest = await req.json();
     const tweet = params.tweet;
