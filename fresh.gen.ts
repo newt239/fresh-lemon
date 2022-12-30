@@ -10,7 +10,7 @@ import * as $3 from "./routes/api/twitter.ts";
 import * as $4 from "./routes/index.tsx";
 import * as $5 from "./routes/redirect.tsx";
 import * as $6 from "./routes/twitter2gphoto.tsx";
-import * as $$0 from "./islands/Tweet.tsx";
+import * as $$0 from "./islands/SavePhoto.tsx";
 
 const manifest = {
   routes: {
@@ -23,7 +23,7 @@ const manifest = {
     "./routes/twitter2gphoto.tsx": $6,
   },
   islands: {
-    "./islands/Tweet.tsx": $$0,
+    "./islands/SavePhoto.tsx": $$0,
   },
   baseUrl: import.meta.url,
   config,

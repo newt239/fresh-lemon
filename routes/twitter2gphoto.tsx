@@ -1,5 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
-import Twitter from "../islands/Tweet.tsx";
+import Twitter from "../islands/SavePhoto.tsx";
 
 export default function Home() {
   return (
