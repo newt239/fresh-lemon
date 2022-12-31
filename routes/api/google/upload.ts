@@ -53,7 +53,7 @@ export const handler: Handlers = {
     const mediaItems: MediaItemProps[] = [];
 
     for (const image of tweet.includes.media) {
-      const imageRes = await fetch(image.url);
+      const imageRes = await fetch(`${image.url}?format=jpg&name=large`);
       const contentType = imageRes.headers.get("Content-Type");
       if (contentType && imageRes.body) {
         const res = await fetch(

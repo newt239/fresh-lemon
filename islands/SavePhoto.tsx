@@ -23,16 +23,13 @@ export default function Twitter() {
   }, []);
 
   const getTweet = async () => {
-    if (
-      tweetUrl.startsWith("https://twitter.com") ||
-      tweetUrl.startsWith("https://mobile.twitter.com")
-    ) {
+    try {
       const id = tweetUrl.split("status/")[1].split("?")[0];
       const url = `./api/twitter?id=${id}`;
       const res = await fetch(url);
       const data = await res.json();
       setTweet(data);
-    } else {
+    } catch (e) {
       setError(true);
     }
   };
@@ -70,11 +67,13 @@ export default function Twitter() {
         <input
           type="text"
           value={tweetUrl}
-          onChange={(e) => setTweetUrl(e.currentTarget.value)}
+          onInput={(e) => setTweetUrl(e.currentTarget.value)}
           class="input input-bordered w-full max-w-xs my-5"
         />
         <button
           onClick={getTweet}
+          disabled={!(tweetUrl.startsWith("https://twitter.com") ||
+            tweetUrl.startsWith("https://mobile.twitter.com"))}
           class="btn btn-primary"
         >
           Get!
@@ -124,7 +123,10 @@ export default function Twitter() {
           </ul>
           <div class="tweetImageList">
             {tweet.includes.media.map((media) => (
-              <img src={media.url} class="tweetImage" />
+              <img
+                src={`${media.url}?format=jpg&name=large`}
+                class="tweetImage"
+              />
             ))}
           </div>
           <h3 class="text-xl font-bold mt-5">Album</h3>
