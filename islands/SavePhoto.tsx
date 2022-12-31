@@ -124,7 +124,7 @@ export default function Twitter() {
           <div class="tweetImageList">
             {tweet.includes.media.map((media) => (
               <img
-                src={`${media.url}?format=jpg&name=large`}
+                src={`${media.url}?format=jpg&name=orig`}
                 class="tweetImage"
               />
             ))}
