@@ -19,11 +19,20 @@ export const handler: Handlers = {
 export default function Home({ url, data }: PageProps<{ uri: string }>) {
   return (
     <>
-      <main>
-        <h1 class="text-3xl font-bold">Fresh Lemon</h1>
-        <h2 class="text-xl font-bold mt-5">twitter2gphoto</h2>
-        <a href={data.uri} class="btn btn-primary m-5">Sign in with Google</a>
-      </main>
+      <div
+        className="hero bg-base-200"
+        style={{ height: "calc(100vh - 2rem)" }}
+      >
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold">Fresh Lemon</h1>
+            <p className="py-6">
+              Save the tweet image to Google Photos.
+            </p>
+            <a href={data.uri} class="btn btn-primary">Sign in with Google</a>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

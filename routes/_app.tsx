@@ -13,7 +13,7 @@ export default function ({ Component }: AppProps) {
         />
         <link rel="stylesheet" href={asset("style.css")} />
       </Head>
-      <div data-theme="lemonade">
+      <div data-theme="lemonade" class="wrapper">
         <Component />
       </div>
     </>

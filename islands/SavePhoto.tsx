@@ -1,41 +1,43 @@
 import { useEffect, useState } from "preact/hooks";
+import { Album } from "../routes/api/google/albums.ts";
 import { Tweet } from "../routes/api/twitter.ts";
 
-export default function Twitter() {
+export default function SavePhoto() {
   const [albumList, setAlbumList] = useState<{ id: string; title: string }[]>(
     [],
   );
   const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
   const [tweetUrl, setTweetUrl] = useState<string>("");
   const [tweet, setTweet] = useState<Tweet | null>(null);
-  const [googlePhotos, setGooglePhotos] = useState<string[]>([]);
+  const [photos, setPhotos] = useState<string[]>([]);
   const [error, setError] = useState<boolean>(false);
-
-  useEffect(() => {
-    const getAlbumList = async () => {
-      const res = await fetch(
-        `./api/google/albums`,
-      );
-      const data = await res.json();
-      setAlbumList(data);
-    };
-    getAlbumList();
-  }, []);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [uploadError, setUploadError] = useState<boolean>(false);
 
   const getTweet = async () => {
-    try {
-      const id = tweetUrl.split("status/")[1].split("?")[0];
-      const url = `./api/twitter?id=${id}`;
-      const res = await fetch(url);
-      const data = await res.json();
+    const id = tweetUrl.split("status/")[1].split("/")[0].split("?")[0];
+    const url = `./api/twitter?id=${id}`;
+    const res = await fetch(url);
+    const data: Tweet = await res.json();
+    if (data.includes && data.includes.media.length !== 0) {
       setTweet(data);
-    } catch (e) {
+      setTweetUrl(
+        `https://twitter.com/${data.includes.users[0].username}/status/${id}`,
+      );
+
+      const albumRes = await fetch(
+        `./api/google/albums`,
+      );
+      const albumData: Album[] = await albumRes.json();
+      setAlbumList(albumData);
+    } else {
       setError(true);
     }
   };
 
   const saveToGooglePhoto = async () => {
     if (tweet) {
+      setLoading(true);
       const url = `./api/google/upload`;
       const res = await fetch(url, {
         method: "POST",
@@ -44,115 +46,149 @@ export default function Twitter() {
           tweet,
         }),
       });
-      const data = await res.json();
-      setGooglePhotos(data);
+      const data: string[] = await res.json();
+      if (data.length !== 0) {
+        setPhotos(data);
+      } else {
+        setUploadError(true);
+      }
+      setLoading(false);
     }
   };
 
   const reset = () => {
     setTweetUrl("");
     setTweet(null);
-    setGooglePhotos([]);
+    setPhotos([]);
   };
 
   const closeError = () => {
     reset();
     setError(false);
+    setUploadError(false);
   };
 
   return (
-    <div>
-      <h3 class="text-xl font-bold mt-5">Tweet URL</h3>
-      <div class="flex gap-5 items-center">
-        <input
-          type="text"
-          value={tweetUrl}
-          onInput={(e) => setTweetUrl(e.currentTarget.value)}
-          class="input input-bordered w-full max-w-xs my-5"
-        />
-        <button
-          onClick={getTweet}
-          disabled={!(tweetUrl.startsWith("https://twitter.com") ||
-            tweetUrl.startsWith("https://mobile.twitter.com"))}
-          class="btn btn-primary"
-        >
-          Get!
-        </button>
-      </div>
-      {error && (
-        <div className="alert alert-error shadow-lg">
-          <div>
+    <>
+      <h2 className="text-4xl font-bold">Tweet URL</h2>
+      <div className="form-control py-6">
+        <div className="input-group">
+          <input
+            type="text"
+            placeholder="https://twitter.com/"
+            value={tweetUrl}
+            onInput={(e) => setTweetUrl(e.currentTarget.value)}
+            className="input w-full input-bordered"
+          />
+          <button
+            onClick={getTweet}
+            disabled={!(tweetUrl.startsWith("https://twitter.com/") ||
+              tweetUrl.startsWith("https://mobile.twitter.com/"))}
+            className="btn btn-square"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current flex-shrink-0 h-6 w-6"
+              className="h-6 w-6"
               fill="none"
               viewBox="0 0 24 24"
+              stroke="currentColor"
             >
               <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <span>ツイートの取得中にエラーが発生しました。</span>
-          </div>
-          <div className="flex-none">
-            <button onClick={closeError} className="btn btn-sm btn-ghost">
-              閉じる
-            </button>
-          </div>
-        </div>
-      )}
-      {tweet && (
-        <div>
-          <ul class="list-disc m-5">
-            <li>
-              <a
-                href={`https://twitter.com/${
-                  tweet.includes.users[0].username
-                }/status/${tweet.data.id}`}
-                target="_blank"
-                class="link link-primary"
-              >
-                {`https://twitter.com/${
-                  tweet.includes.users[0].username
-                }/status/${tweet.data.id}`}
-              </a>
-            </li>
-          </ul>
-          <div class="tweetImageList">
-            {tweet.includes.media.map((media) => (
-              <img
-                src={`${media.url}?format=jpg&name=orig`}
-                class="tweetImage"
-              />
-            ))}
-          </div>
-          <h3 class="text-xl font-bold mt-5">Album</h3>
-          <select
-            onChange={(e) => setCurrentAlbumId(e.currentTarget.value)}
-            class="select select-primary w-full max-w-xs my-5"
-          >
-            {albumList.map((album, key) => (
-              <option value={album.id}>{album.title}</option>
-            ))}
-          </select>
-          <button
-            onClick={saveToGooglePhoto}
-            class="btn btn-primary btn-block my-5"
-          >
-            Save to Google Photo
           </button>
         </div>
-      )}
-      {googlePhotos.length !== 0 && (
-        <div>
-          <h3 class="text-xl font-bold mt-5">Success!</h3>
-          <ul class="list-disc m-5">
-            {googlePhotos.map((photo) => (
+      </div>
+      <h2 className="text-4xl font-bold">Result</h2>
+      {error // https://github.com/denoland/fresh/discussions/606#discussioncomment-3902802
+        ? (
+          <div className="py-6">
+            <div className="alert alert-error shadow-lg">
+              <div>
+                <span>ツイートの取得中にエラーが発生しました。URLをもう一度確認してください。</span>
+              </div>
+              <div className="flex-none">
+                <button onClick={closeError} className="btn btn-sm btn-ghost">
+                  閉じる
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+        : <div></div>}
+
+      {tweet
+        ? (
+          <div>
+            <ul className="list-disc m-5">
               <li>
-                <a href={photo} target="_blank" class="link link-primary">
+                <a
+                  href={tweetUrl}
+                  target="_blank"
+                  className="link link-primary"
+                >
+                  {tweetUrl}
+                </a>
+              </li>
+            </ul>
+            <div className="tweetImageList py-6">
+              {tweet.includes.media.map((media) => (
+                <img
+                  src={`${media.url}?format=jpg&name=orig`}
+                  className="tweetImage"
+                />
+              ))}
+            </div>
+            <h2 className="text-4xl font-bold">Album</h2>
+            <select
+              onInput={(e) => setCurrentAlbumId(e.currentTarget.value)}
+              className="select select-primary w-full max-w-xs my-5"
+            >
+              {albumList.map((album) => (
+                <option value={album.id}>{album.title}</option>
+              ))}
+            </select>
+            <button
+              onClick={saveToGooglePhoto}
+              disabled={loading}
+              className={`btn btn-primary btn-block ${
+                loading ? "loading" : ""
+              }`}
+            >
+              Save to Google Photo
+            </button>
+          </div>
+        )
+        : <div></div>}
+
+      {uploadError
+        ? (
+          <div className="py-6">
+            <div className="alert alert-error shadow-lg">
+              <div>
+                <span>アップロードに失敗しました。時間を置いて再度お試しください。</span>
+              </div>
+              <div className="flex-none">
+                <button onClick={closeError} className="btn btn-sm btn-ghost">
+                  閉じる
+                </button>
+              </div>
+            </div>
+          </div>
+        )
+        : <div></div>}
+
+      {photos.length !== 0 && (
+        <div className="py-6">
+          <h3 className="text-xl font-bold py-6">Success!</h3>
+          <ul className="list-disc py-6">
+            {photos.map((photo) => (
+              <li>
+                <a href={photo} target="_blank" className="link link-primary">
                   {photo}
                 </a>
               </li>
@@ -160,15 +196,10 @@ export default function Twitter() {
           </ul>
         </div>
       )}
-      <div class="flex gap-5 items-center">
-        <a href="/" class="btn btn-link">{"<"} back home</a>
-        <button
-          onClick={reset}
-          class="btn btn-error"
-        >
-          Reset
-        </button>
+
+      <div className="py-6">
+        <a href="/" className="btn btn-link">{"<"} back home</a>
       </div>
-    </div>
+    </>
   );
 }

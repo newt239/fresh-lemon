@@ -30,39 +30,24 @@ export const handler: Handlers = {
 export default function Redirect({ url, data }: PageProps<{ auth: boolean }>) {
   return (
     <>
-      <main>
-        <h1 class="text-3xl">Save Twitter photos to Google Photos</h1>
-        <h2 class="text-xl">
-        </h2>
-        <div
-          className={`alert alert-${
-            data.auth ? "success" : "error"
-          } shadow-lg my-5`}
-        >
-          <div>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="stroke-current flex-shrink-0 h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
-            </svg>
-            {data.auth ? "login success!" : "login failed..."}
+      <div
+        className="hero bg-base-200"
+        style={{ height: "calc(100vh - 2rem)" }}
+      >
+        <div className="hero-content text-center">
+          <div className="max-w-md">
+            <p className="text-4xl font-bold py-6">
+              {data.auth ? "Login success!" : "Login failed..."}
+            </p>
+            <a href="/" class="btn btn-link">{"<"} Back home</a>
+            {data.auth && (
+              <a href="/twitter2gphoto" class="btn btn-primary m-5">
+                Save photos on Twitter
+              </a>
+            )}
           </div>
         </div>
-        {data.auth && (
-          <a href="/twitter2gphoto" class="btn btn-primary m-5">
-            Save photos on Twitter
-          </a>
-        )}
-        <a href="/" class="btn btn-link m-5">{"<"} Back home</a>
-      </main>
+      </div>
     </>
   );
 }
