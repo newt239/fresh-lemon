@@ -84,6 +84,7 @@ export const handler: Handlers = {
           });
         }
       }
+
       const uploadRes = await fetch(
         `https://photoslibrary.googleapis.com/v1/mediaItems:batchCreate`,
         {
@@ -94,8 +95,8 @@ export const handler: Handlers = {
             "Access-Control-Allow-Origin": "*",
           },
           body: JSON.stringify({
-            "albumId": params.album_id,
-            "newMediaItems": mediaItems,
+            albumId: params.album_id,
+            newMediaItems: mediaItems,
           }),
         },
       );
@@ -106,7 +107,7 @@ export const handler: Handlers = {
         result.mediaItem.productUrl
       );
       return new Response(JSON.stringify(googlePhotoUrlList));
-    } catch (e) {
+    } catch (_e) {
       return new Response(JSON.stringify([]));
     }
   },

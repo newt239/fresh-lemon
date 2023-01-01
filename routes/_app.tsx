@@ -5,7 +5,7 @@ export default function ({ Component }: AppProps) {
   return (
     <>
       <Head>
-        <title>Fresh App</title>
+        <title>Fresh Lemon</title>
         <link
           href="https://cdn.jsdelivr.net/npm/daisyui@2.18.1/dist/full.css"
           rel="stylesheet"

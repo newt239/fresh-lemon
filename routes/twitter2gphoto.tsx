@@ -11,7 +11,7 @@ export default function Home() {
         className="bg-base-200"
         style={{ minHeight: "calc(100vh - 2rem)" }}
       >
-        <div className="max-w-lg py-6" style={{ margin: "auto" }}>
+        <div className="max-w-lg p-6" style={{ margin: "auto" }}>
           <SavePhoto />
         </div>
       </div>

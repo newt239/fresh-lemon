@@ -70,7 +70,7 @@ export default function SavePhoto() {
 
   return (
     <>
-      <h2 className="text-4xl font-bold">Tweet URL</h2>
+      <h2 className="text-3xl font-bold">Tweet URL</h2>
       <div className="form-control py-6">
         <div className="input-group">
           <input
@@ -103,7 +103,6 @@ export default function SavePhoto() {
           </button>
         </div>
       </div>
-      <h2 className="text-4xl font-bold">Result</h2>
       {error // https://github.com/denoland/fresh/discussions/606#discussioncomment-3902802
         ? (
           <div className="py-6">
@@ -124,6 +123,7 @@ export default function SavePhoto() {
       {tweet
         ? (
           <div>
+            <h2 className="text-3xl font-bold">Result</h2>
             <ul className="list-disc m-5">
               <li>
                 <a
@@ -145,9 +145,11 @@ export default function SavePhoto() {
             </div>
             <h2 className="text-4xl font-bold">Album</h2>
             <select
+              value={currentAlbumId}
               onInput={(e) => setCurrentAlbumId(e.currentTarget.value)}
               className="select select-primary w-full max-w-xs my-5"
             >
+              <option value="">アルバムに入れない</option>
               {albumList.map((album) => (
                 <option value={album.id}>{album.title}</option>
               ))}
