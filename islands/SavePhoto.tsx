@@ -1,12 +1,7 @@
 import { useEffect, useState } from "preact/hooks";
-import { Album } from "../routes/api/google/albums.ts";
 import { Tweet } from "../routes/api/twitter.ts";
 
 export default function SavePhoto() {
-  const [albumList, setAlbumList] = useState<{ id: string; title: string }[]>(
-    [],
-  );
-  const [currentAlbumId, setCurrentAlbumId] = useState<string>("");
   const [tweetUrl, setTweetUrl] = useState<string>("");
   const [tweet, setTweet] = useState<Tweet | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -24,12 +19,6 @@ export default function SavePhoto() {
       setTweetUrl(
         `https://twitter.com/${data.includes.users[0].username}/status/${id}`,
       );
-
-      const albumRes = await fetch(
-        `./api/google/albums`,
-      );
-      const albumData: Album[] = await albumRes.json();
-      setAlbumList(albumData);
     } else {
       setError(true);
     }
@@ -42,7 +31,6 @@ export default function SavePhoto() {
       const res = await fetch(url, {
         method: "POST",
         body: JSON.stringify({
-          album_id: currentAlbumId,
           tweet,
         }),
       });
@@ -143,17 +131,6 @@ export default function SavePhoto() {
                 />
               ))}
             </div>
-            <h2 className="text-4xl font-bold">Album</h2>
-            <select
-              value={currentAlbumId}
-              onInput={(e) => setCurrentAlbumId(e.currentTarget.value)}
-              className="select select-primary w-full max-w-xs my-5"
-            >
-              <option value="">アルバムに入れない</option>
-              {albumList.map((album) => (
-                <option value={album.id}>{album.title}</option>
-              ))}
-            </select>
             <button
               onClick={saveToGooglePhoto}
               disabled={loading}
@@ -184,20 +161,22 @@ export default function SavePhoto() {
         )
         : <div></div>}
 
-      {photos.length !== 0 && (
-        <div className="py-6">
-          <h3 className="text-xl font-bold py-6">Success!</h3>
-          <ul className="list-disc py-6">
-            {photos.map((photo) => (
-              <li>
-                <a href={photo} target="_blank" className="link link-primary">
-                  {photo}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {photos.length !== 0
+        ? (
+          <div className="px-6">
+            <h3 className="text-xl font-bold py-6">Success!</h3>
+            <ul className="list-disc py-6">
+              {photos.map((photo) => (
+                <li>
+                  <a href={photo} target="_blank" className="link link-primary">
+                    {photo}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )
+        : <div></div>}
 
       <div className="py-6">
         <a href="/" className="btn btn-link">{"<"} back home</a>

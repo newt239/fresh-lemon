@@ -8,7 +8,10 @@ const oauth2Client = new OAuth2Client({
   tokenUri: "https://accounts.google.com/o/oauth2/token",
   redirectUri: Deno.env.get("REDIRECT_URL")!,
   defaults: {
-    scope: "https://www.googleapis.com/auth/photoslibrary",
+    scope: [
+      "https://www.googleapis.com/auth/photoslibrary.readonly",
+      "https://www.googleapis.com/auth/photoslibrary.appendonly",
+    ],
   },
 });
 export default oauth2Client;

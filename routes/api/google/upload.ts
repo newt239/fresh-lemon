@@ -3,7 +3,6 @@ import { Handlers } from "https://deno.land/x/fresh@1.1.2/server.ts";
 import { getCookies } from "$std/http/cookie.ts";
 
 export interface UploadToGooglePhotoRequest {
-  album_id: string;
   tweet: Tweet;
 }
 
@@ -95,19 +94,19 @@ export const handler: Handlers = {
             "Access-Control-Allow-Origin": "*",
           },
           body: JSON.stringify({
-            albumId: params.album_id,
             newMediaItems: mediaItems,
           }),
         },
       );
 
-      const gphoto: UploadToGooglePhotoSuccessResponse = await uploadRes
+      const gphotoData: UploadToGooglePhotoSuccessResponse = await uploadRes
         .json();
-      const googlePhotoUrlList = gphoto.newMediaItemResults.map((result) =>
+      const googlePhotoUrlList = gphotoData.newMediaItemResults.map((result) =>
         result.mediaItem.productUrl
       );
       return new Response(JSON.stringify(googlePhotoUrlList));
-    } catch (_e) {
+    } catch (e) {
+      console.log(e);
       return new Response(JSON.stringify([]));
     }
   },
