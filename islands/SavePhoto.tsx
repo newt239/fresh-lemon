@@ -163,8 +163,8 @@ export default function SavePhoto() {
 
       {photos.length !== 0
         ? (
-          <div className="px-6">
-            <h3 className="text-xl font-bold py-6">Success!</h3>
+          <div className="py-6">
+            <h3 className="text-xl font-bold px-6">Success!</h3>
             <ul className="list-disc py-6">
               {photos.map((photo) => (
                 <li>
@@ -178,8 +178,17 @@ export default function SavePhoto() {
         )
         : <div></div>}
 
-      <div className="py-6">
+      <div
+        className="py-6"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+        }}
+      >
         <a href="/" className="btn btn-link">{"<"} back home</a>
+        {tweet
+          ? <button onClick={reset} className="btn btn-error">reset</button>
+          : <div></div>}
       </div>
     </>
   );
